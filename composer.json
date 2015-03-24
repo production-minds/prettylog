@@ -1,0 +1,19 @@
+{
+    "name": "productionminds/prettylog",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Gabor Kertai",
+            "email": "gabor@production-minds.com",
+            "homepage": "https://www.productionminds.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"PM\\": "src/PM/"}
+    },
+    "require": {
+        "psr/log": "*",
+        "symfony/console": "~2.6"
+    }
+}

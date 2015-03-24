@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/../vendor/autoload.php';
+
+use PM\PrettyLog;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+$appName = 'pm:pretty-log';
+// ArgvInput always strips the first argument, which is supposed to be the application name
+$input = new ArgvInput(array_merge(array('', $appName), array_slice($argv, 1)));
+$application = new Application($appName, '0.1-dev');
+$application->add(new PrettyLog\PrettyLogCommand());
+$application->run($input);

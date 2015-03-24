@@ -1,0 +1,19 @@
+{
+    "chmod": "0755",
+    "directories": [
+        "src"
+    ],
+    "files": [
+        "README.md"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        }
+    ],
+    "main": "bin/prettylog",
+    "output": "prettylog.phar",
+    "stub": true
+}
