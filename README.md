@@ -36,6 +36,20 @@ To print the usage and options:
 
 	--help
 
+Supported formats
+-----------------
+
+Currently there are parsers for:
+
+- [monolog](https://github.com/Seldaek/monolog) `LineFormatter` syntax (such as [Symfony](http://symfony.com/) application logs)
+- [php-fpm](http://php-fpm.org/) logs
+- [syslog](http://en.wikipedia.org/wiki/Syslog) files
+
+As part of my daily routine I tend to deal with the following log formats too, so I will probably add parsers for:
+
+- [nginx](http://nginx.org/) access and error logs (need to add support for multi-line log entries)
+- [supervisor](http://supervisord.org/) logs
+
 
 Version 0.1-dev
 ===============
