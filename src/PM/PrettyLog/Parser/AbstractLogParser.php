@@ -76,8 +76,8 @@ abstract class AbstractLogParser
     }
 
     /**
-     * @param $line
-     * @return array
+     * @param string $line
+     * @return array|null
      */
     abstract protected function doParseLine($line);
 
