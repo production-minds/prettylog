@@ -3,6 +3,7 @@
 namespace PM\PrettyLog;
 
 use PM\PrettyLog\Parser\AbstractLogParser;
+use PM\PrettyLog\Parser\MonologJSONParser;
 use PM\PrettyLog\Parser\MonologLineParser;
 use PM\PrettyLog\Parser\PhpFpmLogParser;
 use PM\PrettyLog\Parser\SyslogParser;
@@ -51,6 +52,7 @@ class PrettyLogCommand extends Command
             ->setStringColor('<fg=green>', '</fg=green>')
             ->setScalarColor('<fg=green>', '</fg=green>');
         $parsers[] = new MonologLineParser($jsonFormatter);
+        $parsers[] = new MonologJSONParser($jsonFormatter);
         $parsers[] = new SyslogParser();
         $parsers[] = new PhpFpmLogParser();
 
