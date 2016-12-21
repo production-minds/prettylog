@@ -9,6 +9,7 @@ use PM\PrettyLog\Parser\PhpFpmLogParser;
 use PM\PrettyLog\Parser\SyslogParser;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,6 +32,7 @@ class PrettyLogCommand extends Command
             ->addOption('min-level', 'l', InputOption::VALUE_OPTIONAL, "Output only messages at least this level ($levelOptions).", $levelDefault)
             ->addOption('no-dots',  null, InputOption::VALUE_NONE, "Suppress printing dots when log messages are omitted (see --min-level).")
             ->addOption('no-gaps',  null, InputOption::VALUE_NONE, "Suppress printing time gaps.")
+            ->addOption('hilite',    'H', InputOption::VALUE_OPTIONAL, "Text to highlight in output (ANSI mode only). Use /…/ for regular expression.")
         ;
     }
 
@@ -39,6 +41,7 @@ class PrettyLogCommand extends Command
         $formatter = $output->getFormatter();
         $formatter->setStyle('message', new OutputFormatterStyle(null, null, array('bold')));
         $formatter->setStyle('separator', new OutputFormatterStyle('yellow'));
+        $formatter->setStyle('hilite', new OutputFormatterStyle('black', 'yellow', array('blink')));
         $formatter->setStyle('json-key', new OutputFormatterStyle('cyan'));
         $formatter->setStyle('json-string', new OutputFormatterStyle('green'));
         $formatter->setStyle('json-scalar', new OutputFormatterStyle('green'));
@@ -62,6 +65,19 @@ class PrettyLogCommand extends Command
         $minLevel = $input->getOption('min-level');
         $noDots = $input->getOption('no-dots');
         $noGaps = $input->getOption('no-gaps');
+
+        $highlightText = $input->getOption('hilite');
+        if ($highlightText) {
+            if (preg_match('#^/.*/i?$#', $highlightText)) {
+                // use highlight string as regular expression
+                $highlightRegEx = $highlightText;
+            } else {
+                // use highlight string as plain text
+                $highlightRegEx = '/'.preg_quote($highlightText, '/').'/';
+            }
+        } else {
+            $highlightRegEx = null;
+        }
 
         /** @var AbstractLogParser[] $parsers */
         $parsers = array();
@@ -137,7 +153,27 @@ class PrettyLogCommand extends Command
                 }
 
                 $dateTime = date($timestamp < $midnight ? 'Y-m-d H:i:s' : 'H:i:s', $timestamp);
-                $output->writeln("[$dateTime] ".$parser->colorizeLine());
+                $colorful = $parser->colorizeLine();
+                if ($highlightRegEx) {
+                    $colorful = preg_replace($highlightRegEx, '<hilite>$0</hilite>', $colorful);
+                }
+                try {
+                    $output->writeln("[$dateTime] $colorful");
+                } catch (\Symfony\Component\Console\Exception\InvalidArgumentException $exc) {
+                    // OutputFormatterStyleStack::pop() tends to throw this even when the
+                    // message printed successfully and the style stacking looks correct.
+                    if ($highlightRegEx && $exc->getMessage() == 'Incorrectly nested style tag found.') {
+                        // Reset style stack, then we can safely ignore these errors.
+                        $formatter = $output->getFormatter();
+                        if ($formatter instanceof OutputFormatter) {
+                            $formatter->getStyleStack()->reset();
+                        }
+                    } else {
+                        // Otherwise print the unprocessed line and proceed.
+                        $output->write("[$dateTime] <error>{$exc->getMessage()}</error> ");
+                        $output->writeln($colorful, OutputInterface::OUTPUT_RAW);
+                    }
+                }
             } elseif (!$noDots) {
                 $output->write(".");
                 $haveDots++;
