@@ -58,9 +58,8 @@ class PhpFpmLogParser extends AbstractLogParser {
         extract($this->recognizedParts);
 
         $levelStyle = self::$LEVEL_STYLES[$this->level];
-        $messageStyle = 'options=bold';
 
-        return "<$levelStyle>$level</$levelStyle> <$messageStyle>$message</$messageStyle>";
+        return "<$levelStyle>$level</$levelStyle> <message>$message</message>";
     }
 }
 

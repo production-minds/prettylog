@@ -8,6 +8,7 @@ use PM\PrettyLog\Parser\MonologLineParser;
 use PM\PrettyLog\Parser\PhpFpmLogParser;
 use PM\PrettyLog\Parser\SyslogParser;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -32,6 +33,16 @@ class PrettyLogCommand extends Command
         ;
     }
 
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $formatter = $output->getFormatter();
+        $formatter->setStyle('message', new OutputFormatterStyle(null, null, array('bold')));
+        $formatter->setStyle('separator', new OutputFormatterStyle('yellow'));
+        $formatter->setStyle('json-key', new OutputFormatterStyle('cyan'));
+        $formatter->setStyle('json-string', new OutputFormatterStyle('green'));
+        $formatter->setStyle('json-scalar', new OutputFormatterStyle('green'));
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->timezone = new \DateTimeZone(date_default_timezone_get());
@@ -48,9 +59,9 @@ class PrettyLogCommand extends Command
         $parsers = array();
         $jsonFormatter = new JSONFormatter(4, 10);
         $jsonFormatter
-            ->setKeyColor('<fg=cyan>', '</fg=cyan>')
-            ->setStringColor('<fg=green>', '</fg=green>')
-            ->setScalarColor('<fg=green>', '</fg=green>');
+            ->setKeyColor('<json-key>', '</json-key>')
+            ->setStringColor('<json-string>', '</json-string>')
+            ->setScalarColor('<json-scalar>', '</json-scalar>');
         $parsers[] = new MonologLineParser($jsonFormatter);
         $parsers[] = new MonologJSONParser($jsonFormatter);
         $parsers[] = new SyslogParser();
@@ -102,16 +113,16 @@ class PrettyLogCommand extends Command
 
                 if (!$noGaps) {
                     if ($previousTimestamp === 0) {
-                        $output->writeln("<fg=yellow>===== first entry ".self::prettyDate($timestamp, $now)." =====</fg=yellow>");
+                        $output->writeln("<separator>===== first entry ".self::prettyDate($timestamp, $now)." =====</separator>");
                     } else {
                         // show separators at time jumps
                         $timeGap = abs($timestamp - $previousTimestamp);
                         if ($timeGap > 60) {
                             $gapSec = $timeGap % 60;
                             $gapMin = ($timeGap - $gapSec) / 60;
-                            $output->writeln("<fg=yellow>========== time-gap ${gapMin}m ${gapSec}s ==========</fg=yellow>");
+                            $output->writeln("<separator>========== time-gap ${gapMin}m ${gapSec}s ==========</separator>");
                         } elseif ($timeGap > 30) {
-                            $output->writeln("<fg=yellow>---------- time-gap ${timeGap}s ----------</fg=yellow>");
+                            $output->writeln("<separator>---------- time-gap ${timeGap}s ----------</separator>");
                         }
                     }
                     $previousTimestamp = $timestamp;

@@ -41,12 +41,11 @@ abstract class MonologColorizer extends AbstractLogParser
         extract($this->recognizedParts);
 
         $levelStyle = self::$LEVEL_STYLES[$this->level];
-        $messageStyle = 'options=bold';
 
         $context = empty($context) ? '' : ltrim($this->jsonFormatter->formatJSON($context));
         $extra = empty($extra) ? '' : ltrim($this->jsonFormatter->formatJSON($extra));
 
-        return "<$levelStyle>$channel.$level</$levelStyle> <$messageStyle>$message</$messageStyle> $context $extra";
+        return "<$levelStyle>$channel.$level</$levelStyle> <message>$message</message> $context $extra";
     }
 }
 
