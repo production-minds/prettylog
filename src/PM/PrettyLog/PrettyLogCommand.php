@@ -9,7 +9,6 @@ use PM\PrettyLog\Parser\PhpFpmLogParser;
 use PM\PrettyLog\Parser\SyslogParser;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -155,24 +154,15 @@ class PrettyLogCommand extends Command
                 $dateTime = date($timestamp < $midnight ? 'Y-m-d H:i:s' : 'H:i:s', $timestamp);
                 $colorful = $parser->colorizeLine();
                 if ($highlightRegEx) {
-                    $colorful = preg_replace($highlightRegEx, '<hilite>$0</hilite>', $colorful);
+                    $colorful = preg_replace($highlightRegEx, '<hilite>$0</>', $colorful);
                 }
                 try {
                     $output->writeln("[$dateTime] $colorful");
                 } catch (\Symfony\Component\Console\Exception\InvalidArgumentException $exc) {
-                    // OutputFormatterStyleStack::pop() tends to throw this even when the
-                    // message printed successfully and the style stacking looks correct.
-                    if ($highlightRegEx && $exc->getMessage() == 'Incorrectly nested style tag found.') {
-                        // Reset style stack, then we can safely ignore these errors.
-                        $formatter = $output->getFormatter();
-                        if ($formatter instanceof OutputFormatter) {
-                            $formatter->getStyleStack()->reset();
-                        }
-                    } else {
-                        // Otherwise print the unprocessed line and proceed.
-                        $output->write("[$dateTime] <error>{$exc->getMessage()}</error> ");
-                        $output->writeln($colorful, OutputInterface::OUTPUT_RAW);
-                    }
+                    // OutputFormatterStyleStack::pop() tends to throw this when the
+                    // message contains incorrect styling (may happen due to highlights).
+                    $output->write("[$dateTime] <error>{$exc->getMessage()}</error> ");
+                    $output->writeln($colorful, OutputInterface::OUTPUT_RAW);
                 }
             } elseif (!$noDots) {
                 $output->write(".");
