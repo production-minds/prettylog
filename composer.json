@@ -16,7 +16,7 @@
         "psr-4": {"PM\\": "src/PM/"}
     },
     "require": {
-        "psr/log": "*",
+        "psr/log": "~1.0",
         "symfony/console": "~2.6"
     }
 }
