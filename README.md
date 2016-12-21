@@ -60,10 +60,10 @@ As part of my daily routine I tend to deal with the following log formats too, s
 - [supervisor](http://supervisord.org/) logs
 
 
-Version 0.1-dev
+Version 0.8-dev
 ===============
 
-This is a very early release. Use at your own risk. Comments and suggestions are welcome.
+This is an early release. Use at your own risk. Comments and suggestions are welcome.
 
 Building
 ========

@@ -10,6 +10,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 $appName = 'pm:pretty-log';
 // ArgvInput always strips the first argument, which is supposed to be the application name
 $input = new ArgvInput(array_merge(array('', $appName), array_slice($argv, 1)));
-$application = new Application($appName, '0.1-dev');
+$application = new Application($appName, '0.8-dev');
 $application->add(new PrettyLog\PrettyLogCommand());
 $application->run($input);

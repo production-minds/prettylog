@@ -1,6 +1,9 @@
 {
     "name": "productionminds/prettylog",
+    "license": "MIT",
+    "version": "0.8-dev",
     "type": "project",
+    "keywords": ["logging", "console", "Symfony"],
     "authors": [
         {
             "name": "Gabor Kertai",
