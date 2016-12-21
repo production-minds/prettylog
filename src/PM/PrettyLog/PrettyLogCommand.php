@@ -55,8 +55,6 @@ class PrettyLogCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->timezone = new \DateTimeZone(date_default_timezone_get());
-
         $now = time();
         $midnight = $now - ($now % (24*60*60));
 
