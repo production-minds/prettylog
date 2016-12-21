@@ -50,7 +50,7 @@ Supported formats
 
 Currently there are parsers for:
 
-- [monolog](https://github.com/Seldaek/monolog) `LineFormatter` syntax (such as [Symfony](http://symfony.com/) application logs)
+- [monolog](https://github.com/Seldaek/monolog) `LineFormatter` and `JsonFormatter` syntax (such as [Symfony](http://symfony.com/) application logs)
 - [php-fpm](http://php-fpm.org/) logs
 - [syslog](http://en.wikipedia.org/wiki/Syslog) files
 
