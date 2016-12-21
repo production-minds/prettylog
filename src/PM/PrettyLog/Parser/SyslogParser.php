@@ -67,7 +67,7 @@ class SyslogParser extends AbstractLogParser
 
         $pid = empty($pid) ? '' : "[$pid]";
 
-        $levelStyle = self::$LEVEL_STYLES[$this->level];
+        $levelStyle = $this->level;
 
         return "$host <$levelStyle>$daemon</$levelStyle>$pid <message>$message</message>";
     }

@@ -40,7 +40,7 @@ abstract class MonologColorizer extends AbstractLogParser
         /** @var $extra     array */
         extract($this->recognizedParts);
 
-        $levelStyle = self::$LEVEL_STYLES[$this->level];
+        $levelStyle = $this->level;
 
         $context = empty($context) ? '' : ltrim($this->jsonFormatter->formatJSON($context));
         $extra = empty($extra) ? '' : ltrim($this->jsonFormatter->formatJSON($extra));

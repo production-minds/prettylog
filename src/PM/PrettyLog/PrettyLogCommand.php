@@ -7,6 +7,7 @@ use PM\PrettyLog\Parser\MonologJSONParser;
 use PM\PrettyLog\Parser\MonologLineParser;
 use PM\PrettyLog\Parser\PhpFpmLogParser;
 use PM\PrettyLog\Parser\SyslogParser;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,6 +42,15 @@ class PrettyLogCommand extends Command
         $formatter->setStyle('json-key', new OutputFormatterStyle('cyan'));
         $formatter->setStyle('json-string', new OutputFormatterStyle('green'));
         $formatter->setStyle('json-scalar', new OutputFormatterStyle('green'));
+        // define styles for all log levels
+        $formatter->setStyle(LogLevel::DEBUG,      new OutputFormatterStyle('blue'));
+        $formatter->setStyle(LogLevel::INFO,       new OutputFormatterStyle('white'));
+        $formatter->setStyle(LogLevel::NOTICE,     new OutputFormatterStyle('magenta'));
+        $formatter->setStyle(LogLevel::WARNING,    new OutputFormatterStyle('yellow', 'blue'));
+        $formatter->setStyle(LogLevel::ERROR,      new OutputFormatterStyle('white', 'red'));
+        $formatter->setStyle(LogLevel::CRITICAL,   new OutputFormatterStyle('yellow', 'red'));
+        $formatter->setStyle(LogLevel::ALERT,      new OutputFormatterStyle('yellow', 'red', array('bold')));
+        $formatter->setStyle(LogLevel::EMERGENCY,  new OutputFormatterStyle('yellow', 'red', array('blink')));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -17,17 +17,6 @@ abstract class AbstractLogParser
         LogLevel::EMERGENCY,
     );
 
-    protected static $LEVEL_STYLES = array(
-        LogLevel::DEBUG     => 'fg=blue',
-        LogLevel::INFO      => 'fg=white',
-        LogLevel::NOTICE    => 'fg=magenta',
-        LogLevel::WARNING   => 'bg=blue;fg=yellow',
-        LogLevel::ERROR     => 'bg=red;fg=white',
-        LogLevel::CRITICAL  => 'bg=red;fg=yellow',
-        LogLevel::ALERT     => 'bg=red;fg=yellow;options=bold',
-        LogLevel::EMERGENCY => 'bg=red;fg=yellow;options=blink',
-    );
-
     /** @var array */
     protected $recognizedParts;
 
