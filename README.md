@@ -24,13 +24,22 @@ Alternative short syntax:
 
 	-l debug|info|notice|warning|error|critical|alert|emergency
 
-When filtered for log level, prettylog will print a dot for each omitted log message. Disable this by:
+When filtered for log level, `prettylog` will print a dot for each omitted log message. Disable this by:
 
 	--no-dots
 
-Prettylog will also add a yellow "time gap" line between log entries that are more than 30 seconds apart. Disable this by:
+`prettylog` will also add a yellow "time gap" line between log entries that are more than 30 seconds apart. Disable this by:
 
 	--no-gaps
+
+To highlight text in the output (ANSI mode only) use the `--hilite` (or `-H`) option:
+
+    --hilite=text
+    --hilite='some words'
+
+You can also provide regular expressions (following the [PCRE syntax](http://php.net/manual/en/reference.pcre.pattern.syntax.php) if you start the hilite value with a slash `/` and end it with `/` or `/i` (for case-insensitive):
+
+    --hilite='/reg(ular)? ?ex(pression)?/i'
 
 To print the usage and options:
 
@@ -59,11 +68,11 @@ This is a very early release. Use at your own risk. Comments and suggestions are
 Building
 ========
 
-Install [composer](https://getcomposer.org/): 
+Install [composer](https://getcomposer.org/):
 
 	curl -sS https://getcomposer.org/installer | php
 
-Install [box](http://box-project.org/): 
+Install [box](http://box-project.org/):
 
 	curl -LSs https://box-project.github.io/box2/installer.php | php
 	sudo mv box.phar /usr/local/bin/box
