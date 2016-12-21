@@ -35,6 +35,8 @@ abstract class AbstractLogParser
     }
 
     /**
+     * @param string $minLevel any of the LogLevel::* constants
+     *
      * @return bool
      */
     public function isAtOrAboveLevel($minLevel)
@@ -56,6 +58,8 @@ abstract class AbstractLogParser
     }
 
     /**
+     * @param string $line
+     *
      * @return bool
      */
     public function parseLine($line)
